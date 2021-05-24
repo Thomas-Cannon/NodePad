@@ -16,19 +16,7 @@ noteslist_item.xml布局文件是笔记每个条目的布局，原应用中notes
         android:singleLine="true"
     />
 </RelativeLayout>
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
+
 我们可以看出，原应用中，每个笔记条目中，只有一个TextView, 用来显示笔记的标题，而要想显示时间戳，必须再加入一个TextView, 修改后的noteslist_item.xml的代码为:
 
 <RelativeLayout android:layout_height="match_parent"
@@ -52,27 +40,7 @@ noteslist_item.xml布局文件是笔记每个条目的布局，原应用中notes
         android:gravity="center_vertical"
     />
 </RelativeLayout>
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
+
 其中，第二个的TextView用于时间戳的显示。
 
 1.2. 修改时间戳类型
@@ -95,21 +63,7 @@ if (values.containsKey(NotePad.Notes.COLUMN_NAME_CREATE_DATE) == false) {
 if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
     values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateFormat);
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
+
 NoteEditor中的updateNote方法:
 
 long now = System.currentTimeMillis();
@@ -117,11 +71,7 @@ Date date = new Date(now);
 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
 String dateFormat = simpleDateFormat.format(date);
 values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateFormat);
-1
-2
-3
-4
-5
+
 1.3. NoteList的修改
 首先，如果查看到NotePadProvider中关于数据表的创建，我们可以发现，表中已经存在创建时间和修改时间的列
 
@@ -136,27 +86,14 @@ values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, dateFormat);
                    + NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER"
                    + ");");
        }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
+
 而在NotesList中，列的投影PROJECTION为:
 
 private static final String[] PROJECTION = new String[] {
             NotePad.Notes._ID, // 0
             NotePad.Notes.COLUMN_NAME_TITLE, // 1
     };
-1
-2
-3
-4
+
 只投影出了ID和每条笔记的标题，如果我们要加入时间戳，必须要将修改时间的列也投影出来.
 所以我们将PROJECTION添加上修改时间：
 
@@ -165,19 +102,14 @@ private static final String[] PROJECTION = new String[] {
             NotePad.Notes.COLUMN_NAME_TITLE, // 1
             NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,//添加修改时间
     };
-1
-2
-3
-4
-5
+
 PROJECTION只是定义了需要被取出来的数据列，而之后用Cursor进行数据库查询，再之后用Adapter进行装填。
 在看完源码之后，Cursor不用变化，我们需要将显示列dataColumns和他们的viewIDs加入修改时间这一属性
 原来的代码:
 
 String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE};
 int[] viewIDs = { android.R.id.text1 };
-1
-2
+
 加入修改时间后:
 
 String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE }//加入修改时间;
