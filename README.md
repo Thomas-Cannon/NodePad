@@ -117,3 +117,4 @@ int[] viewIDs = { android.R.id.text1, R.id.text2 }//加入修改时间;
 1
 2
 再到Adapter进行装配和显示
+![image text](/master/img/%E6%97%B6%E9%97%B4%E6%88%B3%E6%88%AA%E5%9B%BE.png)
